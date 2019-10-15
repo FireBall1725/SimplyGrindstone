@@ -1,0 +1,20 @@
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        jcenter()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.+"
+        classpath "co.riiid:gradle-github-plugin:0.4.+"
+        classpath "com.selesse:gradle-git-changelog:0.2.+"
+    }
+}
+
+apply plugin: 'co.riiid.gradle'
+apply plugin: 'eclipse'
+
+fileTree('gradle/scripts').include ('*.gradle').collect().sort().each { apply from: it }

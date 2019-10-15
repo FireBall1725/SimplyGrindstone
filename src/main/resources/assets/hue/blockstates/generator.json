@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=north": { "model": "hue:block/testblock" },
+    "facing=south": { "model": "hue:block/testblock", "y": 180 },
+    "facing=west": { "model": "hue:block/testblock", "y": 270 },
+    "facing=east": { "model": "hue:block/testblock", "y": 90 },
+    "facing=up": { "model": "hue:block/testblock", "x": -90 },
+    "facing=down": { "model": "hue:block/testblock", "x": 90 }
+  }
+}

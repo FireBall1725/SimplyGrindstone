@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="http://my.issue.tracker/"
+
+[[mods]]
+modId="hue"
+version="{{version}}"
+displayName="Hue"
+updateJSONURL="http://myurl.me/"
+displayURL="http://example.com/"
+logoFile="hue_logo.png"
+credits=""
+authors="FireBall1725"
+description='''
+Light mod for Minecraft, adds light fixtures and different light bulbs
+'''
+
+[[dependencies.hue]]
+    modId="forge"
+    mandatory=true
+    versionRange="[28,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.hue]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.14.4]"
+    ordering="NONE"
+    side="BOTH"

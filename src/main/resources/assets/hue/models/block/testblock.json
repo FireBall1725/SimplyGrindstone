@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "hue:block/top-light",
+    "north": "hue:block/front-light",
+    "east": "hue:block/side1-light",
+    "south": "hue:block/side2-light",
+    "west": "hue:block/side3-light",
+    "up": "hue:block/top-light",
+    "down": "hue:block/bottom-light"
+  }
+}
