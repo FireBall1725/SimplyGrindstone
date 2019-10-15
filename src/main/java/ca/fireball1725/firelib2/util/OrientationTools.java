@@ -1,5 +1,6 @@
 package ca.fireball1725.firelib2.util;
 
+import ca.fireball1725.firelib2.common.blocks.BlockBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

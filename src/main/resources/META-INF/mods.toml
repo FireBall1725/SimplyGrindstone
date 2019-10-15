@@ -3,9 +3,9 @@ loaderVersion="[28,)"
 issueTrackerURL="http://my.issue.tracker/"
 
 [[mods]]
-modId="hue"
+modId="simplygrindstone"
 version="{{version}}"
-displayName="Hue"
+displayName="Simply Grindstone"
 updateJSONURL="http://myurl.me/"
 displayURL="http://example.com/"
 logoFile="hue_logo.png"
