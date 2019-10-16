@@ -1,0 +1,12 @@
+{
+  "type": "firelib2:grindstone",
+  "grindingTime": 200,
+  "experience": 100.0,
+  "ingredient": {
+    "tag": "forge:ore/iron"
+  },
+  "result": {
+    "item": "minecraft:iron_ingot",
+    "count": 2
+  }
+}

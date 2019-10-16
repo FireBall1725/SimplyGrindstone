@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "firelib2:block/tb-top-dark",
+    "north": "firelib2:block/tb-front-dark",
+    "east": "firelib2:block/tb-side1-dark",
+    "south": "firelib2:block/tb-side2-dark",
+    "west": "firelib2:block/tb-side3-dark",
+    "up": "firelib2:block/tb-top-dark",
+    "down": "firelib2:block/tb-bottom-dark"
+  }
+}

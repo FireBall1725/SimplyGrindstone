@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "firelib2:block/tb-side1-light"
+  }
+}

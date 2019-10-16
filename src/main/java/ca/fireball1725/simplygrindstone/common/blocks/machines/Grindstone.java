@@ -19,4 +19,5 @@ public class Grindstone extends BlockBase {
   public RotationType getRotationType() {
     return RotationType.HORIZONTAL;
   }
+
 }

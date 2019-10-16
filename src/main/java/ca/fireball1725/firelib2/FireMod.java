@@ -11,7 +11,6 @@ import java.util.ArrayList;
 public abstract class FireMod {
   private final Logger LOGGER;
   private final String MODID;
-  private final EventBus EVENTBUS;
 
   public abstract ArrayList<Block> getBlocks();
 
@@ -19,6 +18,5 @@ public abstract class FireMod {
     this.LOGGER = logger;
     this.MODID = modID;
 
-    FMLJavaModLoadingContext.get().getModEventBus().addListener();
   }
 }
