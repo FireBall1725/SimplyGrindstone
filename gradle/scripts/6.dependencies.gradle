@@ -58,8 +58,16 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     mods fg.deobf("com.fireball1725.devworld2:DevWorld2:1.14.4-b8-client")
-    mods fg.deobf("mezz.jei:jei-1.14.4:6.0.0.13")
-    mods fg.deobf('mcjtylib:mcjtylib-1.14:3.5.7:alpha')
-    mods fg.deobf('rftools-base:rftoolsbase-1.14:0.0.4:alpha')
-    mods fg.deobf('rftools-power:rftoolspower-1.14:1.2.4:alpha')
+//    mods fg.deobf("mezz.jei:jei-1.14.4:6.0.0.13")
+//    mods fg.deobf('mcjtylib:mcjtylib-1.14:3.5.7:alpha')
+//    mods fg.deobf('rftools-base:rftoolsbase-1.14:0.0.4:alpha')
+//    mods fg.deobf('rftools-power:rftoolspower-1.14:1.2.4:alpha')
+
+    if (findProject(':FireLib2') != null) {
+        compile project(':FireLib2')
+    } else {
+        compile fg.deobf (project.dependencies.create("ca.fireball1725.firelib2:firelib2:${firelib2_version}") {
+            transitive = false
+        })
+    }
 }

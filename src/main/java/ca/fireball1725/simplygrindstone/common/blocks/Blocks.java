@@ -4,9 +4,7 @@ import ca.fireball1725.firelib2.common.blocks.BlockBase;
 import ca.fireball1725.firelib2.common.blocks.IFireBlock;
 import ca.fireball1725.simplygrindstone.common.blocks.machines.Grindstone;
 import ca.fireball1725.simplygrindstone.common.blocks.misc.Crank;
-import com.google.common.collect.ArrayListMultimap;
 import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
 
 import java.util.ArrayList;
 import java.util.Objects;
