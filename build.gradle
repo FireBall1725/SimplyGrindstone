@@ -18,3 +18,7 @@ apply plugin: 'co.riiid.gradle'
 apply plugin: 'eclipse'
 
 fileTree('gradle/scripts').include ('*.gradle').collect().sort().each { apply from: it }
+
+dependencies {
+    compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
+}

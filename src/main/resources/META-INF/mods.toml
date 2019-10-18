@@ -33,5 +33,5 @@ Light mod for Minecraft, adds light fixtures and different light bulbs
 #    modId="firelib2"
 #    mandatory=true
 #    versionRange="[0,)"
-#    ordering="NONE"
+#    ordering="BEFORE"
 #    side="BOTH"
