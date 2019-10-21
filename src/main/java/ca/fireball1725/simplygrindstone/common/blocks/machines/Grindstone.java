@@ -1,7 +1,7 @@
 package ca.fireball1725.simplygrindstone.common.blocks.machines;
 
-import ca.fireball1725.firelib2.common.blocks.BlockBase;
-import ca.fireball1725.firelib2.util.RotationType;
+import ca.fireball1725.mods.firelib2.common.blocks.BlockBase;
+import ca.fireball1725.mods.firelib2.util.RotationType;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 

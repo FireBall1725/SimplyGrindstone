@@ -1,6 +1,6 @@
 package ca.fireball1725.simplygrindstone;
 
-import ca.fireball1725.firelib2.FireMod;
+import ca.fireball1725.mods.firelib2.FireMod;
 import ca.fireball1725.simplygrindstone.common.blocks.Blocks;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.Mod;
