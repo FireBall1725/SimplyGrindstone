@@ -1,0 +1,24 @@
+apply plugin: "com.github.breadmoirai.github-release"
+
+String readChangelogString(String filePath) {
+    File file = new File(filePath)
+    if(file.exists()) {
+        return file.text
+    }
+
+    return ""
+}
+
+githubRelease {
+    token System.getenv("GITHUB_TOKEN") ?: "InvalidP@ssword"
+    owner System.getenv("CIRCLE_PROJECT_USERNAME") ?: ""
+    repo System.getenv("CIRCLE_PROJECT_REPONAME") ?: ""
+    targetCommitish = System.getenv("CIRCLE_SHA1") ?: ""
+    body {
+        return readChangelogString("CHANGELOG.md")
+    }
+    releaseAssets jar.destinationDir.listFiles()
+    overwrite true
+    tagName = project.version
+    releaseName = "v${project.version}"
+}

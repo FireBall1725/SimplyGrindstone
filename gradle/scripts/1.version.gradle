@@ -1,6 +1,6 @@
-version = System.getenv("VERSION") ?: "0.0.0"
+project.version = System.getenv("CI_VERSION") ?: "0.0.0"
 
 // todo: Update this to archiveClassifier (for Gradle 5)
 jar {
-  classifier = "${project_type}"
+    classifier = "${project_type}"
 }
