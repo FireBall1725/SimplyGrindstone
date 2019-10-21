@@ -1,0 +1,39 @@
+repositories {
+    mavenLocal()
+    mavenCentral()
+
+    maven {
+        name "FireBall1725 maven"
+        url "https://repo.erins.net/maven"
+    }
+}
+
+configurations {
+    mods
+}
+
+task installMods(type: Copy, dependsOn: "deinstallMods") {
+    from { configurations.mods }
+    include "**/*.jar"
+    into file("run/mods")
+}
+
+task deinstallMods(type: Delete) {
+    delete fileTree(dir: "run/mods", include: "*.jar")
+}
+
+project.afterEvaluate {
+    project.tasks['prepareRuns'].dependsOn(project.tasks['installMods'])
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    if (findProject(':FireLib2') != null) {
+        compile project(':FireLib2')
+    } else {
+        compile fg.deobf (project.dependencies.create("ca.fireball1725.mods:FireLib2:${firelib2_version}") {
+            transitive = false
+        })
+    }
+}

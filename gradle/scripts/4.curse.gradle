@@ -6,7 +6,7 @@ curseforge {
         id = curse_project_id
         changelog = file('CHANGELOG.md')
         changelogType = 'markdown'
-        releaseType = 'beta'
+        releaseType = curse_release_type
         addGameVersion minecraft_version
     }
 }

@@ -1,9 +1,7 @@
 /*
 !/.circleci
-!/.travis.yml
 !/.gitignore
 !/.gitmodules
-!/.codeclimate.yml
 !/src
 !/gradle
 !/gradlew
@@ -16,7 +14,7 @@
 !/build.bat
 !/build.sh
 !/gradle.properties
-!/webresources
-!/images
 !/settings.gradle
+!/webresources
+!/.chglog
 .DS_Store
