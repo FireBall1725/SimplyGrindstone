@@ -1,0 +1,18 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "simplygrindstone:block/crank",
+    "textures": {
+      "texture": "block/oak_planks"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "facing=north": { "model": "simplygrindstone:block/crank" },
+    "facing=south": { "y": 180 },
+    "facing=west": { "y": 270 },
+    "facing=east": { "y": 90 },
+    "facing=up": { "x": -90 },
+    "facing=down": { "x": 90 }
+  }
+}
