@@ -3,7 +3,7 @@ package ca.fireball1725.simplygrindstone.common.blocks;
 import ca.fireball1725.mods.firelib2.common.blocks.BlockBase;
 import ca.fireball1725.mods.firelib2.common.blocks.IFireBlock;
 import ca.fireball1725.simplygrindstone.common.blocks.machines.Grindstone;
-import ca.fireball1725.simplygrindstone.common.blocks.misc.Crank;
+import ca.fireball1725.simplygrindstone.common.blocks.misc.BlockCrank;
 import net.minecraft.block.Block;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 public enum Blocks implements IFireBlock {
   GRINDSTONE(Grindstone::new),
-  CRANK(Crank::new)
+  CRANK(BlockCrank::new)
   ;
 
   private final BlockBase block;
