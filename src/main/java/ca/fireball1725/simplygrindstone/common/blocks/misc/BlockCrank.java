@@ -130,46 +130,7 @@ public class BlockCrank extends BlockBase implements IProvideEvent {
 
     TileEntityCrank tileEntity = TileHelper.getTileEntity(world, blockPos, TileEntityCrank.class);
 
-    event.setCanceled(true);
-
-
-    Vec3d projectedView = event.getInfo().getProjectedView();
-
-
-    assert tileEntity != null;
-
-
-    GlStateManager.enableBlend();
-    GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-    GlStateManager.lineWidth(Math.max(2.5f, (float)Minecraft.getInstance().mainWindow.getFramebufferWidth() / 1920f * 2.5f));
-    GlStateManager.disableTexture();
-    GlStateManager.depthMask(false);
-    GlStateManager.matrixMode(5889);
-    GlStateManager.pushMatrix();
-    //GlStateManager.scalef(1.0f, 1.0f, 0.999f);
-
-    //
-
-    Vec3d eyes = Minecraft.getInstance().player.getEyePosition(event.getPartialTicks());
-    //System.out.println(">>> " + (blockPos.getX() - eyes.getX()));
-
-    //GlStateManager.translated(blockPos.getX() - eyes.getX(), blockPos.getY() - eyes.getY(), blockPos.getZ() - eyes.getZ());
-
     if (tileEntity.isRotating())
-      return;
-      //GlStateManager.rotated(tileEntity.getRotation() + 15 * event.getPartialTicks(), 0, 1, 0);
-
-    //if (!tileEntity.isRotating())
-    //  GlStateManager.rotatef(90, 0, 1, 0);
-
-    WorldRenderer.drawShape(blockState.getShape(world, blockPos, ISelectionContext.forEntity(event.getInfo().getRenderViewEntity())), (double)blockPos.getX() - projectedView.getX(), (double)blockPos.getY() - projectedView.getY(), (double)blockPos.getZ() - projectedView.getZ(), 0.0F, 0.0F, 0.0F, 0.4F);
-
-    //
-
-    GlStateManager.popMatrix();
-    GlStateManager.matrixMode(5888);
-    GlStateManager.depthMask(true);
-    GlStateManager.enableTexture();
-    GlStateManager.disableBlend();
+      event.setCanceled(true);
   }
 }
