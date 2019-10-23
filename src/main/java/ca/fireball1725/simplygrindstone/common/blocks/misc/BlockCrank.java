@@ -15,8 +15,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
@@ -126,96 +128,48 @@ public class BlockCrank extends BlockBase implements IProvideEvent {
     if (!(target.getType() == RayTraceResult.Type.BLOCK && blockState.getBlock() == Blocks.CRANK.getBlock()))
       return;
 
-    TileEntity tileEntity = TileHelper.getTileEntity(world, blockPos, TileEntity.class);
+    TileEntityCrank tileEntity = TileHelper.getTileEntity(world, blockPos, TileEntityCrank.class);
 
     event.setCanceled(true);
 
-    Vec3d playerPos = rendererManager.info.getLookDirection();
 
-    GL11.glPushMatrix();
-    GlStateManager.translated(blockPos.getX() - playerPos.getX() + 0.5, blockPos.getY() - playerPos.getY() + 0.5, blockPos.getZ() - playerPos.getZ() + 0.5);
+    Vec3d projectedView = event.getInfo().getProjectedView();
+
+
     assert tileEntity != null;
 
-    //if (tileEntity.isRotating())
-    //  GlStateManager.rotatef(tileEntity.getRotation() + 15 * event.getPartialTicks() + 90, 0, 1, 0);
-
-    //if (!tileEntity.isRotating())
-      GlStateManager.rotatef(0 + 90, 0, 1, 0);
 
     GlStateManager.enableBlend();
-    GlStateManager.blendFuncSeparate(770, 771, 1, 0);
-    GlStateManager.color4f(0.0F, 0.0F, 0.0F, 0.4F);
-    GL11.glLineWidth(2.0F);
-    //GlStateManager.disableTexture2D();
+    GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+    GlStateManager.lineWidth(Math.max(2.5f, (float)Minecraft.getInstance().mainWindow.getFramebufferWidth() / 1920f * 2.5f));
     GlStateManager.disableTexture();
     GlStateManager.depthMask(false);
+    GlStateManager.matrixMode(5889);
+    GlStateManager.pushMatrix();
+    //GlStateManager.scalef(1.0f, 1.0f, 0.999f);
 
-    AxisAlignedBB crankShaftBB = crankShaft.getBoundingBox();
-    AxisAlignedBB crankTopBB = crankTop.getBoundingBox();
+    //
 
-    Tessellator tessellator = Tessellator.getInstance();
-    BufferBuilder worldrenderer = tessellator.getBuffer();
-    worldrenderer.begin(3, DefaultVertexFormats.POSITION);
-    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.maxY, crankShaftBB.maxZ).endVertex();
-    worldrenderer.pos(crankTopBB.maxX, crankTopBB.minY, crankTopBB.maxZ).endVertex();
-    worldrenderer.pos(crankTopBB.minX, crankTopBB.minY, crankTopBB.maxZ).endVertex();
-    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.maxY, crankShaftBB.maxZ).endVertex();
-    tessellator.draw();
-    worldrenderer.begin(3, DefaultVertexFormats.POSITION);
-    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.maxY, crankShaftBB.minZ).endVertex();
-    worldrenderer.pos(crankTopBB.minX, crankTopBB.minY, crankTopBB.minZ).endVertex();
-    worldrenderer.pos(crankTopBB.maxX, crankTopBB.minY, crankTopBB.minZ).endVertex();
-    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.maxY, crankShaftBB.minZ).endVertex();
-    tessellator.draw();
-    worldrenderer.begin(3, DefaultVertexFormats.POSITION);
-    worldrenderer.pos(crankTopBB.minX, crankTopBB.maxY, crankTopBB.minZ).endVertex();
-    worldrenderer.pos(crankTopBB.maxX, crankTopBB.maxY, crankTopBB.minZ).endVertex();
-    worldrenderer.pos(crankTopBB.maxX, crankTopBB.maxY, crankTopBB.maxZ).endVertex();
-    worldrenderer.pos(crankTopBB.minX, crankTopBB.maxY, crankTopBB.maxZ).endVertex();
-    worldrenderer.pos(crankTopBB.minX, crankTopBB.maxY, crankTopBB.minZ).endVertex();
-    tessellator.draw();
-    worldrenderer.begin(1, DefaultVertexFormats.POSITION);
-    worldrenderer.pos(crankTopBB.minX, crankTopBB.minY, crankTopBB.minZ).endVertex();
-    worldrenderer.pos(crankTopBB.minX, crankTopBB.maxY, crankTopBB.minZ).endVertex();
-    worldrenderer.pos(crankTopBB.maxX, crankTopBB.minY, crankTopBB.minZ).endVertex();
-    worldrenderer.pos(crankTopBB.maxX, crankTopBB.maxY, crankTopBB.minZ).endVertex();
-    worldrenderer.pos(crankTopBB.maxX, crankTopBB.minY, crankTopBB.maxZ).endVertex();
-    worldrenderer.pos(crankTopBB.maxX, crankTopBB.maxY, crankTopBB.maxZ).endVertex();
-    worldrenderer.pos(crankTopBB.minX, crankTopBB.minY, crankTopBB.maxZ).endVertex();
-    worldrenderer.pos(crankTopBB.minX, crankTopBB.maxY, crankTopBB.maxZ).endVertex();
-    tessellator.draw();
+    Vec3d eyes = Minecraft.getInstance().player.getEyePosition(event.getPartialTicks());
+    //System.out.println(">>> " + (blockPos.getX() - eyes.getX()));
 
-    worldrenderer.begin(3, DefaultVertexFormats.POSITION);
-    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.minY, crankShaftBB.minZ).endVertex();
-    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.minY, crankShaftBB.minZ).endVertex();
-    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.minY, crankShaftBB.maxZ).endVertex();
-    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.minY, crankShaftBB.maxZ).endVertex();
-    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.minY, crankShaftBB.minZ).endVertex();
-    tessellator.draw();
-    worldrenderer.begin(3, DefaultVertexFormats.POSITION);
-    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.maxY, crankShaftBB.minZ).endVertex();
-    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.maxY, crankShaftBB.minZ).endVertex();
-    tessellator.draw();
-    worldrenderer.begin(3, DefaultVertexFormats.POSITION);
-    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.maxY, crankShaftBB.maxZ).endVertex();
-    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.maxY, crankShaftBB.maxZ).endVertex();
-    tessellator.draw();
-    worldrenderer.begin(1, DefaultVertexFormats.POSITION);
-    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.minY, crankShaftBB.minZ).endVertex();
-    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.maxY, crankShaftBB.minZ).endVertex();
-    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.minY, crankShaftBB.minZ).endVertex();
-    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.maxY, crankShaftBB.minZ).endVertex();
-    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.minY, crankShaftBB.maxZ).endVertex();
-    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.maxY, crankShaftBB.maxZ).endVertex();
-    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.minY, crankShaftBB.maxZ).endVertex();
-    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.maxY, crankShaftBB.maxZ).endVertex();
-    tessellator.draw();
+    //GlStateManager.translated(blockPos.getX() - eyes.getX(), blockPos.getY() - eyes.getY(), blockPos.getZ() - eyes.getZ());
 
+    if (tileEntity.isRotating())
+      return;
+      //GlStateManager.rotated(tileEntity.getRotation() + 15 * event.getPartialTicks(), 0, 1, 0);
+
+    //if (!tileEntity.isRotating())
+    //  GlStateManager.rotatef(90, 0, 1, 0);
+
+    WorldRenderer.drawShape(blockState.getShape(world, blockPos, ISelectionContext.forEntity(event.getInfo().getRenderViewEntity())), (double)blockPos.getX() - projectedView.getX(), (double)blockPos.getY() - projectedView.getY(), (double)blockPos.getZ() - projectedView.getZ(), 0.0F, 0.0F, 0.0F, 0.4F);
+
+    //
+
+    GlStateManager.popMatrix();
+    GlStateManager.matrixMode(5888);
     GlStateManager.depthMask(true);
     GlStateManager.enableTexture();
-    //GlStateManager.enableTexture2D();
     GlStateManager.disableBlend();
-
-    GL11.glPopMatrix();
   }
 }
