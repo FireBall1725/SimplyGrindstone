@@ -9,10 +9,13 @@ import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
-public class TileEntityCrank extends TileEntityBase implements ITickable {
+public class TileEntityCrank extends TileEntityBase implements ITickableTileEntity {
   private int rotation = 0;
   private boolean rotating = false;
   private int badCrankCount = 0;
@@ -26,18 +29,19 @@ public class TileEntityCrank extends TileEntityBase implements ITickable {
   public void tick() {
     if (rotating) {
       rotation += 15;
+
       if (rotation % 180 == 0) {
         rotating = false;
-        // todo: crank Done
-        if (rotation == 360)
-          rotation = 0;
+        // todo: call crankdone
       }
+
+      if (rotation == 360)
+        rotation = 0;
     }
   }
 
   public float getRotation() {
     //todo: check block below
-
     return rotation;
   }
 
@@ -58,10 +62,9 @@ public class TileEntityCrank extends TileEntityBase implements ITickable {
   }
 
   public void doCrank() {
-    System.out.println(">>> Rotating?");
-
     ItemStack itemStack = new ItemStack(Blocks.CRANK.getBlock());
 
+    //breakCrank();
     //todo: check block below
 
     if (rotating)
@@ -72,7 +75,8 @@ public class TileEntityCrank extends TileEntityBase implements ITickable {
 
     // todo: Random break
 
-    rotating = true;
+    this.rotating = true;
+    this.markForUpdate();
     this.markDirty();
   }
 

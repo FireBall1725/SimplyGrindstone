@@ -7,23 +7,8 @@
     "transform": "forge:default-block"
   },
   "variants": {
-    "facing": {
-      "north": {
-        "model": "simplygrindstone:block/crank",
-        "y": 90
-      },
-      "south": {
-        "model": "simplygrindstone:block/crank",
-        "y": 270
-      },
-      "east": {
-        "model": "simplygrindstone:block/crank",
-        "y": 180
-      },
-      "west": {
-        "model": "simplygrindstone:block/crank",
-        "y": 0
-      }
+    "": {
+      "model": "simplygrindstone:block/crank"
     }
   }
 }
