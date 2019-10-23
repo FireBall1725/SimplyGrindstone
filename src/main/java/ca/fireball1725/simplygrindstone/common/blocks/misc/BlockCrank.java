@@ -8,11 +8,18 @@ import ca.fireball1725.mods.firelib2.util.TileHelper;
 import ca.fireball1725.simplygrindstone.common.blocks.Blocks;
 import ca.fireball1725.simplygrindstone.common.tileentities.misc.TileEntityCrank;
 import ca.fireball1725.simplygrindstone.util.ICrankable;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,10 +31,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
@@ -39,6 +43,8 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLXEXTStereoTree;
 
 import javax.annotation.Nullable;
 
@@ -112,10 +118,104 @@ public class BlockCrank extends BlockBase implements IProvideEvent {
   @SubscribeEvent
   public void drawBlockHighlight(DrawBlockHighlightEvent event) {
     RayTraceResult target = event.getTarget();
-    BlockState blockState = event.getInfo().getRenderViewEntity().getEntityWorld().getBlockState(new BlockPos(target.getHitVec()));
+    World world = event.getInfo().getRenderViewEntity().getEntityWorld();
+    BlockPos blockPos = new BlockPos(target.getHitVec());
+    BlockState blockState = world.getBlockState(blockPos);
+    EntityRendererManager rendererManager = Minecraft.getInstance().getRenderManager();
+
     if (!(target.getType() == RayTraceResult.Type.BLOCK && blockState.getBlock() == Blocks.CRANK.getBlock()))
       return;
 
+    TileEntity tileEntity = TileHelper.getTileEntity(world, blockPos, TileEntity.class);
+
     event.setCanceled(true);
+
+    Vec3d playerPos = rendererManager.info.getLookDirection();
+
+    GL11.glPushMatrix();
+    GlStateManager.translated(blockPos.getX() - playerPos.getX() + 0.5, blockPos.getY() - playerPos.getY() + 0.5, blockPos.getZ() - playerPos.getZ() + 0.5);
+    assert tileEntity != null;
+
+    //if (tileEntity.isRotating())
+    //  GlStateManager.rotatef(tileEntity.getRotation() + 15 * event.getPartialTicks() + 90, 0, 1, 0);
+
+    //if (!tileEntity.isRotating())
+      GlStateManager.rotatef(0 + 90, 0, 1, 0);
+
+    GlStateManager.enableBlend();
+    GlStateManager.blendFuncSeparate(770, 771, 1, 0);
+    GlStateManager.color4f(0.0F, 0.0F, 0.0F, 0.4F);
+    GL11.glLineWidth(2.0F);
+    //GlStateManager.disableTexture2D();
+    GlStateManager.disableTexture();
+    GlStateManager.depthMask(false);
+
+    AxisAlignedBB crankShaftBB = crankShaft.getBoundingBox();
+    AxisAlignedBB crankTopBB = crankTop.getBoundingBox();
+
+    Tessellator tessellator = Tessellator.getInstance();
+    BufferBuilder worldrenderer = tessellator.getBuffer();
+    worldrenderer.begin(3, DefaultVertexFormats.POSITION);
+    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.maxY, crankShaftBB.maxZ).endVertex();
+    worldrenderer.pos(crankTopBB.maxX, crankTopBB.minY, crankTopBB.maxZ).endVertex();
+    worldrenderer.pos(crankTopBB.minX, crankTopBB.minY, crankTopBB.maxZ).endVertex();
+    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.maxY, crankShaftBB.maxZ).endVertex();
+    tessellator.draw();
+    worldrenderer.begin(3, DefaultVertexFormats.POSITION);
+    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.maxY, crankShaftBB.minZ).endVertex();
+    worldrenderer.pos(crankTopBB.minX, crankTopBB.minY, crankTopBB.minZ).endVertex();
+    worldrenderer.pos(crankTopBB.maxX, crankTopBB.minY, crankTopBB.minZ).endVertex();
+    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.maxY, crankShaftBB.minZ).endVertex();
+    tessellator.draw();
+    worldrenderer.begin(3, DefaultVertexFormats.POSITION);
+    worldrenderer.pos(crankTopBB.minX, crankTopBB.maxY, crankTopBB.minZ).endVertex();
+    worldrenderer.pos(crankTopBB.maxX, crankTopBB.maxY, crankTopBB.minZ).endVertex();
+    worldrenderer.pos(crankTopBB.maxX, crankTopBB.maxY, crankTopBB.maxZ).endVertex();
+    worldrenderer.pos(crankTopBB.minX, crankTopBB.maxY, crankTopBB.maxZ).endVertex();
+    worldrenderer.pos(crankTopBB.minX, crankTopBB.maxY, crankTopBB.minZ).endVertex();
+    tessellator.draw();
+    worldrenderer.begin(1, DefaultVertexFormats.POSITION);
+    worldrenderer.pos(crankTopBB.minX, crankTopBB.minY, crankTopBB.minZ).endVertex();
+    worldrenderer.pos(crankTopBB.minX, crankTopBB.maxY, crankTopBB.minZ).endVertex();
+    worldrenderer.pos(crankTopBB.maxX, crankTopBB.minY, crankTopBB.minZ).endVertex();
+    worldrenderer.pos(crankTopBB.maxX, crankTopBB.maxY, crankTopBB.minZ).endVertex();
+    worldrenderer.pos(crankTopBB.maxX, crankTopBB.minY, crankTopBB.maxZ).endVertex();
+    worldrenderer.pos(crankTopBB.maxX, crankTopBB.maxY, crankTopBB.maxZ).endVertex();
+    worldrenderer.pos(crankTopBB.minX, crankTopBB.minY, crankTopBB.maxZ).endVertex();
+    worldrenderer.pos(crankTopBB.minX, crankTopBB.maxY, crankTopBB.maxZ).endVertex();
+    tessellator.draw();
+
+    worldrenderer.begin(3, DefaultVertexFormats.POSITION);
+    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.minY, crankShaftBB.minZ).endVertex();
+    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.minY, crankShaftBB.minZ).endVertex();
+    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.minY, crankShaftBB.maxZ).endVertex();
+    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.minY, crankShaftBB.maxZ).endVertex();
+    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.minY, crankShaftBB.minZ).endVertex();
+    tessellator.draw();
+    worldrenderer.begin(3, DefaultVertexFormats.POSITION);
+    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.maxY, crankShaftBB.minZ).endVertex();
+    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.maxY, crankShaftBB.minZ).endVertex();
+    tessellator.draw();
+    worldrenderer.begin(3, DefaultVertexFormats.POSITION);
+    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.maxY, crankShaftBB.maxZ).endVertex();
+    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.maxY, crankShaftBB.maxZ).endVertex();
+    tessellator.draw();
+    worldrenderer.begin(1, DefaultVertexFormats.POSITION);
+    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.minY, crankShaftBB.minZ).endVertex();
+    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.maxY, crankShaftBB.minZ).endVertex();
+    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.minY, crankShaftBB.minZ).endVertex();
+    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.maxY, crankShaftBB.minZ).endVertex();
+    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.minY, crankShaftBB.maxZ).endVertex();
+    worldrenderer.pos(crankShaftBB.maxX, crankShaftBB.maxY, crankShaftBB.maxZ).endVertex();
+    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.minY, crankShaftBB.maxZ).endVertex();
+    worldrenderer.pos(crankShaftBB.minX, crankShaftBB.maxY, crankShaftBB.maxZ).endVertex();
+    tessellator.draw();
+
+    GlStateManager.depthMask(true);
+    GlStateManager.enableTexture();
+    //GlStateManager.enableTexture2D();
+    GlStateManager.disableBlend();
+
+    GL11.glPopMatrix();
   }
 }
