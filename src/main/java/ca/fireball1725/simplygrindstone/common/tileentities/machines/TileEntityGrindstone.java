@@ -13,7 +13,7 @@ public class TileEntityGrindstone extends TileEntityBase implements ICrankable {
 
   @Override
   public void doCrank() {
-
+    System.out.println(">>> Block Cranked");
   }
 
   @Override

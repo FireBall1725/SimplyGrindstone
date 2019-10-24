@@ -12,7 +12,9 @@ import java.util.function.Supplier;
 
 public enum Blocks implements IFireBlock {
   GRINDSTONE(BlockGrindstone::new),
-  CRANK(BlockCrank::new)
+
+  CRANK_WOOD(() -> {return new BlockCrank((BlockCrank.CrankMaterial.WOOD));}),
+  CRANK_IRON(() -> {return new BlockCrank((BlockCrank.CrankMaterial.IRON));}),
   ;
 
   private final BlockBase block;

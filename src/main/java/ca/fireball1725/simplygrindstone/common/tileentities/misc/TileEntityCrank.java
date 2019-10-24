@@ -1,18 +1,21 @@
 package ca.fireball1725.simplygrindstone.common.tileentities.misc;
 
-import ca.fireball1725.mods.firelib2.FireLib2;
 import ca.fireball1725.mods.firelib2.common.tileentities.TileEntityBase;
 import ca.fireball1725.mods.firelib2.util.TileHelper;
-import ca.fireball1725.simplygrindstone.SimplyGrindstone;
 import ca.fireball1725.simplygrindstone.common.blocks.Blocks;
-import net.minecraft.client.renderer.texture.ITickable;
+import ca.fireball1725.simplygrindstone.common.blocks.misc.BlockCrank;
+import ca.fireball1725.simplygrindstone.util.ICrankable;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class TileEntityCrank extends TileEntityBase implements ITickableTileEntity {
@@ -21,8 +24,8 @@ public class TileEntityCrank extends TileEntityBase implements ITickableTileEnti
   private int badCrankCount = 0;
   private int crankTickCounter = 400;
 
-  public TileEntityCrank() {
-    super(Blocks.CRANK.getBlock().getTileEntityType());
+  public TileEntityCrank(TileEntityType<?> tileEntityTypeIn) {
+    super(tileEntityTypeIn);
   }
 
   @Override
@@ -32,7 +35,7 @@ public class TileEntityCrank extends TileEntityBase implements ITickableTileEnti
 
       if (rotation % 180 == 0) {
         rotating = false;
-        // todo: call crankdone
+        crankDone();
       }
 
       if (rotation == 360)
@@ -40,8 +43,21 @@ public class TileEntityCrank extends TileEntityBase implements ITickableTileEnti
     }
   }
 
+  private void crankDone() {
+    BlockPos pos = getPos().down();
+
+    TileEntity tileEntity = TileHelper.getTileEntity(getWorld(), pos, TileEntity.class);
+    if (tileEntity instanceof ICrankable)
+      ((ICrankable)tileEntity).doCrank();
+  }
+
   public float getRotation() {
-    //todo: check block below
+    if (getWorld() != null && !isMachineValid())
+      breakCrank(true, false);
+
+    float rotation = this.rotation + calculateRotationOffset();
+    if (rotation >= 360)
+      rotation -= 360;
     return rotation;
   }
 
@@ -49,11 +65,13 @@ public class TileEntityCrank extends TileEntityBase implements ITickableTileEnti
     return rotating;
   }
 
-  private void breakCrank() {
-    Random rand = new Random();
-    ItemStack itemSticks = new ItemStack(Items.STICK, rand.nextInt(4));
-    world.destroyBlock(pos, false);
-    TileHelper.dropItemStack(itemSticks, this.world, this.pos);
+  private void breakCrank(boolean dropCrank, boolean dropSticks) {
+    if (dropSticks) {
+      Random rand = new Random();
+      ItemStack itemSticks = new ItemStack(Items.STICK, rand.nextInt(4));
+      TileHelper.dropItemStack(itemSticks, this.world, this.pos);
+    }
+    world.destroyBlock(pos, dropCrank);
   }
 
   @Override
@@ -62,22 +80,67 @@ public class TileEntityCrank extends TileEntityBase implements ITickableTileEnti
   }
 
   public void doCrank() {
-    ItemStack itemStack = new ItemStack(Blocks.CRANK.getBlock());
-
-    //breakCrank();
-    //todo: check block below
-
     if (rotating)
       return;
 
     if (this.getWorld().isRemote)
       return;
 
-    // todo: Random break
+    BlockCrank.CrankMaterial material = ((BlockCrank)getBlockState().getBlock()).getCrankMaterial();
+
+    TileEntity tileEntity = TileHelper.getTileEntity(getWorld(), getPos().down(), TileEntity.class);
+    if (!(tileEntity != null && tileEntity instanceof ICrankable && ((ICrankable)tileEntity).canCrank())) {
+      //todo: is material wood?
+      if (badCrankCount >= 4 && material == BlockCrank.CrankMaterial.WOOD)
+        breakCrank(false, true);
+
+      badCrankCount++;
+
+      this.markForUpdate();
+      this.markDirty();
+      return;
+    }
+
+    // Reset badCrankCount
+    badCrankCount = 0;
+
+    // todo: Random break if material is wood
 
     this.rotating = true;
     this.markForUpdate();
     this.markDirty();
+  }
+
+  private boolean isMachineValid() {
+    if (getWorld() == null)
+      return false;
+
+    TileEntity tileEntity = TileHelper.getTileEntity(getWorld(), getPos().down(), TileEntity.class);
+    return tileEntity instanceof ICrankable;
+  }
+
+  private int calculateRotationOffset() {
+    if (getWorld() == null)
+      return 0;
+
+    BlockState blockState = getWorld().getBlockState(getPos().down());
+    if (blockState.has(BlockStateProperties.HORIZONTAL_FACING)) {
+      Direction direction = blockState.get(BlockStateProperties.HORIZONTAL_FACING);
+
+      switch (direction) {
+        case NORTH:
+        default:
+          return 90;
+        case EAST:
+          return 180;
+        case SOUTH:
+          return 270;
+        case WEST:
+          return 0;
+      }
+    }
+
+    return 0;
   }
 
   @Override
