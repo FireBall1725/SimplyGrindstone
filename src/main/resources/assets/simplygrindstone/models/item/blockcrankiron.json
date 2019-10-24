@@ -1,0 +1,6 @@
+{
+  "parent": "simplygrindstone:block/crank",
+  "textures": {
+    "texture": "block/iron_block"
+  }
+}

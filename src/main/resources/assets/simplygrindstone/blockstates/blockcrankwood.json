@@ -1,0 +1,14 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "texture": "block/oak_planks"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "": {
+      "model": "simplygrindstone:block/crank"
+    }
+  }
+}
