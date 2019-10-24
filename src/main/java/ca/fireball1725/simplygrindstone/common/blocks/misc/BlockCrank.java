@@ -38,8 +38,7 @@ public class BlockCrank extends BlockBase implements IProvideEvent {
     );
     setRegistryName("blockcrank" + crankMaterial.name().toLowerCase());
     setCanRotate(false);
-    setTileEntity(() -> {return new TileEntityCrank((getTileEntityType())) {
-    };});
+    setTileEntity(() -> new TileEntityCrank((getTileEntityType())));
     this.crankMaterial = crankMaterial;
   }
 
