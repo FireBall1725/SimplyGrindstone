@@ -32,7 +32,7 @@ dependencies {
     if (findProject(':FireLib2') != null) {
         compile project(':FireLib2')
     } else {
-        compile fg.deobf (project.dependencies.create("ca.fireball1725.mods:FireLib2:${firelib2_version}") {
+        compile fg.deobf(project.dependencies.create("ca.fireball1725.mods:FireLib2:${firelib2_version}") {
             transitive = false
         })
     }

@@ -13,8 +13,12 @@ import java.util.function.Supplier;
 public enum Blocks implements IFireBlock {
   GRINDSTONE(BlockGrindstone::new),
 
-  CRANK_WOOD(() -> {return new BlockCrank((BlockCrank.CrankMaterial.WOOD));}),
-  CRANK_IRON(() -> {return new BlockCrank((BlockCrank.CrankMaterial.IRON));}),
+  CRANK_WOOD(() -> {
+    return new BlockCrank((BlockCrank.CrankMaterial.WOOD));
+  }),
+  CRANK_IRON(() -> {
+    return new BlockCrank((BlockCrank.CrankMaterial.IRON));
+  }),
   ;
 
   private final BlockBase block;
@@ -22,11 +26,6 @@ public enum Blocks implements IFireBlock {
   Blocks(Supplier<BlockBase> blockSupplier) {
     Objects.requireNonNull(blockSupplier);
     this.block = blockSupplier.get();
-  }
-
-  @Override
-  public BlockBase getBlock() {
-    return this.block;
   }
 
   public static ArrayList<Block> toList() {
@@ -37,5 +36,10 @@ public enum Blocks implements IFireBlock {
     }
 
     return blocks;
+  }
+
+  @Override
+  public BlockBase getBlock() {
+    return this.block;
   }
 }

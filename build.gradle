@@ -11,7 +11,7 @@ buildscript {
         classpath group: 'gradle.plugin.com.github.breadmoirai', name: 'github-release', version: '2.2.+'
     }
 }
-fileTree('gradle/scripts').include ('*.gradle').collect().sort().each { apply from: it }
+fileTree('gradle/scripts').include('*.gradle').collect().sort().each { apply from: it }
 
 dependencies {
 

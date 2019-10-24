@@ -2,7 +2,6 @@ package ca.fireball1725.simplygrindstone.common.tileentities.misc;
 
 import ca.fireball1725.mods.firelib2.common.tileentities.TileEntityBase;
 import ca.fireball1725.mods.firelib2.util.TileHelper;
-import ca.fireball1725.simplygrindstone.common.blocks.Blocks;
 import ca.fireball1725.simplygrindstone.common.blocks.misc.BlockCrank;
 import ca.fireball1725.simplygrindstone.util.ICrankable;
 import net.minecraft.block.BlockState;
@@ -48,7 +47,7 @@ public class TileEntityCrank extends TileEntityBase implements ITickableTileEnti
 
     TileEntity tileEntity = TileHelper.getTileEntity(getWorld(), pos, TileEntity.class);
     if (tileEntity instanceof ICrankable)
-      ((ICrankable)tileEntity).doCrank();
+      ((ICrankable) tileEntity).doCrank();
   }
 
   public float getRotation() {
@@ -86,10 +85,10 @@ public class TileEntityCrank extends TileEntityBase implements ITickableTileEnti
     if (this.getWorld().isRemote)
       return;
 
-    BlockCrank.CrankMaterial material = ((BlockCrank)getBlockState().getBlock()).getCrankMaterial();
+    BlockCrank.CrankMaterial material = ((BlockCrank) getBlockState().getBlock()).getCrankMaterial();
 
     TileEntity tileEntity = TileHelper.getTileEntity(getWorld(), getPos().down(), TileEntity.class);
-    if (!(tileEntity != null && tileEntity instanceof ICrankable && ((ICrankable)tileEntity).canCrank())) {
+    if (!(tileEntity != null && tileEntity instanceof ICrankable && ((ICrankable) tileEntity).canCrank())) {
       //todo: is material wood?
       if (badCrankCount >= 4 && material == BlockCrank.CrankMaterial.WOOD)
         breakCrank(false, true);

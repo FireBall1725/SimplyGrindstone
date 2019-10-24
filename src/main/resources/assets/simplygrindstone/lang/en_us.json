@@ -1,3 +1,5 @@
 {
-
+  "block.simplygrindstone.blockcrankwood": "Wooden Crank",
+  "block.simplygrindstone.blockcrankiron": "Iron Crank",
+  "block.simplygrindstone.grindstone": "Grindstone"
 }
