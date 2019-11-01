@@ -65,6 +65,7 @@ public class TileEntityCrank extends TileEntityBase implements ITickableTileEnti
   }
 
   private void breakCrank(boolean dropCrank, boolean dropSticks) {
+    System.out.println(">>> Breaking Crank");
     if (dropSticks) {
       Random rand = new Random();
       ItemStack itemSticks = new ItemStack(Items.STICK, rand.nextInt(4));

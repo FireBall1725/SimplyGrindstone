@@ -1,16 +1,18 @@
 package ca.fireball1725.simplygrindstone.client.gui;
 
+import ca.fireball1725.mods.firelib2.client.gui.ScreenBase;
 import ca.fireball1725.simplygrindstone.common.container.ContainerGrindstone;
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
-public class ScreenGenerator extends ContainerScreen<ContainerGrindstone> {
+public class ScreenGrindstone extends ScreenBase<ContainerGrindstone> {
   private ResourceLocation GUI = new ResourceLocation("simplygrindstone", "textures/gui/grindstone.png");
 
-  public ScreenGenerator(ContainerGrindstone screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+  public ScreenGrindstone(ContainerGrindstone screenContainer, PlayerInventory inv, ITextComponent titleIn) {
     super(screenContainer, inv, titleIn);
 
     this.xSize = 175;
@@ -26,7 +28,7 @@ public class ScreenGenerator extends ContainerScreen<ContainerGrindstone> {
 
   @Override
   protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-    super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+    drawString(Minecraft.getInstance().fontRenderer, this.title.getString(), 5, 5, 0xffffff);
   }
 
   @Override
