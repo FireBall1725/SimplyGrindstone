@@ -2,8 +2,10 @@ package ca.fireball1725.simplygrindstone.common.blocks;
 
 import ca.fireball1725.mods.firelib2.common.blocks.BlockBase;
 import ca.fireball1725.mods.firelib2.common.blocks.IFireBlock;
+import ca.fireball1725.mods.firelib2.util.BlockEnumProvider;
 import ca.fireball1725.simplygrindstone.common.blocks.machines.BlockGrindstone;
 import ca.fireball1725.simplygrindstone.common.blocks.misc.BlockCrank;
+import ca.fireball1725.simplygrindstone.common.blocks.providers.CrankProvider;
 import net.minecraft.block.Block;
 
 import java.util.ArrayList;
@@ -18,14 +20,14 @@ public enum Blocks implements IFireBlock {
   }),
   CRANK_IRON(() -> {
     return new BlockCrank((BlockCrank.CrankMaterial.IRON));
-  }),
+  })
   ;
 
   private final BlockBase block;
 
   Blocks(Supplier<BlockBase> blockSupplier) {
     Objects.requireNonNull(blockSupplier);
-    this.block = blockSupplier.get();
+    block = blockSupplier.get();
   }
 
   public static ArrayList<Block> toList() {
@@ -40,6 +42,6 @@ public enum Blocks implements IFireBlock {
 
   @Override
   public BlockBase getBlock() {
-    return this.block;
+    return block;
   }
 }

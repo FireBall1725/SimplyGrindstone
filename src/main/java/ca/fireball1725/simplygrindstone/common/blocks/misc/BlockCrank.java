@@ -1,17 +1,17 @@
 package ca.fireball1725.simplygrindstone.common.blocks.misc;
 
 import ca.fireball1725.mods.firelib2.common.blocks.BlockBase;
-import ca.fireball1725.mods.firelib2.util.IProvideEvent;
-import ca.fireball1725.mods.firelib2.util.RotationHelper;
-import ca.fireball1725.mods.firelib2.util.RotationType;
-import ca.fireball1725.mods.firelib2.util.TileHelper;
+import ca.fireball1725.mods.firelib2.util.*;
 import ca.fireball1725.simplygrindstone.common.tileentities.misc.TileEntityCrank;
 import ca.fireball1725.simplygrindstone.util.ICrankable;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
+import net.minecraft.advancements.ICriterionInstance;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
@@ -27,9 +27,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.crafting.conditions.ItemExistsCondition;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class BlockCrank extends BlockBase implements IProvideEvent {
+import java.util.function.Consumer;
+
+public class BlockCrank extends BlockBase implements IProvideEvent, IProvideRecipe {
   private final VoxelShape crankTop = VoxelShapes.create(7 / 16d, 8 / 16d, 3 / 16d, 9 / 16d, 10 / 16d, 13 / 16d);
   private final VoxelShape crankShaft = VoxelShapes.create(7 / 16d, 0 / 16d, 7 / 16d, 9 / 16d, 8 / 16d, 9 / 16d);
   private final CrankMaterial crankMaterial;
@@ -115,6 +119,53 @@ public class BlockCrank extends BlockBase implements IProvideEvent {
 
   public CrankMaterial getCrankMaterial() {
     return crankMaterial;
+  }
+
+  @Override
+  public void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+    ShapedRecipeBuilder.shapedRecipe(Blocks.PUMPKIN)
+      .patternLine("xxx")
+      .patternLine("x#x")
+      .patternLine("xxx")
+      .key('x', Blocks.COBBLESTONE)
+      .key('#', Tags.Items.DYES_RED)
+      .setGroup("mytutorial")
+      .addCriterion("cobblestone", InventoryChangeTrigger.Instance.forItems(Blocks.COBBLESTONE))
+      .build(consumer);
+
+    ShapedRecipeBuilder.shapedRecipe(ca.fireball1725.simplygrindstone.common.blocks.Blocks.CRANK_WOOD.getBlock())
+      .patternLine("xxx")
+      .patternLine("x#x")
+      .patternLine("xxx")
+      .key('x', Blocks.COBBLESTONE)
+      .key('#', Tags.Items.DYES_RED)
+      .setGroup("mytutorial")
+      .addCriterion("cobblestone", InventoryChangeTrigger.Instance.forItems(Blocks.COBBLESTONE))
+      .build(consumer);
+
+    switch (this.getCrankMaterial()) {
+      case WOOD:
+      default:
+        ShapedRecipeBuilder.shapedRecipe(this)
+          .patternLine("xxx")
+          .patternLine(" x ")
+          .patternLine(" x ")
+          .key('x', Items.STICK)
+          .setGroup("simplygrindstone")
+          .addCriterion("has_sticks", InventoryChangeTrigger.Instance.forItems(Items.STICK))
+          .build(consumer);
+        break;
+      case IRON:
+        ShapedRecipeBuilder.shapedRecipe(this)
+          .patternLine("xxx")
+          .patternLine(" x ")
+          .patternLine(" x ")
+          .key('x', Items.IRON_INGOT)
+          .setGroup("simplygrindstone")
+          .addCriterion("has_iron", InventoryChangeTrigger.Instance.forItems(Items.IRON_INGOT))
+          .build(consumer);
+        break;
+    }
   }
 
   public static enum CrankMaterial {

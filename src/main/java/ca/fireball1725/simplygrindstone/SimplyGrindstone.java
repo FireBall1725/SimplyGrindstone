@@ -3,6 +3,7 @@ package ca.fireball1725.simplygrindstone;
 import ca.fireball1725.mods.firelib2.FireMod;
 import ca.fireball1725.simplygrindstone.client.render.RenderCrank;
 import ca.fireball1725.simplygrindstone.common.blocks.Blocks;
+import ca.fireball1725.simplygrindstone.common.items.Items;
 import ca.fireball1725.simplygrindstone.common.tileentities.misc.TileEntityCrank;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -31,7 +32,7 @@ public class SimplyGrindstone extends FireMod {
 
   @Override
   public ArrayList<Item> getItems() {
-    return null;
+    return Items.toList();
   }
 
   @Override

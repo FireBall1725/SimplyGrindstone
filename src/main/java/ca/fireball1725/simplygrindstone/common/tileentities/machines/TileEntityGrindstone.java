@@ -17,6 +17,6 @@ public class TileEntityGrindstone extends TileEntityBase implements ICrankable {
 
   @Override
   public boolean canCrank() {
-    return false;
+    return true;
   }
 }

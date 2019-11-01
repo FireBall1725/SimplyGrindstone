@@ -1,3 +1,19 @@
 {
-  "model": "firelib2:testblock-sided-dark"
+  "variants": {
+    "facing=north": {
+      "model": "firelib2:block/testblock-sided-dark"
+    },
+    "facing=south": {
+      "model": "firelib2:block/testblock-sided-dark",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "firelib2:block/testblock-sided-dark",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "firelib2:block/testblock-sided-dark",
+      "y": 90
+    }
+  }
 }
