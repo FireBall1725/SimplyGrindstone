@@ -40,6 +40,10 @@ public class TileEntityCrank extends TileEntityBase implements ITickableTileEnti
       if (rotation == 360)
         rotation = 0;
     }
+
+    // Check block below
+    if (getWorld() != null && !isMachineValid())
+      breakCrank(true, false);
   }
 
   private void crankDone() {
@@ -51,9 +55,6 @@ public class TileEntityCrank extends TileEntityBase implements ITickableTileEnti
   }
 
   public float getRotation() {
-    if (getWorld() != null && !isMachineValid())
-      breakCrank(true, false);
-
     float rotation = this.rotation + calculateRotationOffset();
     if (rotation >= 360)
       rotation -= 360;

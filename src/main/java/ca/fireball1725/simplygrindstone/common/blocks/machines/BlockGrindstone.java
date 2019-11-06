@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -48,14 +49,15 @@ public class BlockGrindstone extends BlockBase {
   @Override
   public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
     if (!worldIn.isRemote) {
+      // Check to see if we are trying to place a crank
       Block handItem = Block.getBlockFromItem(player.getHeldItemMainhand().getItem());
-      if (handItem instanceof BlockCrank && hit.getFace() == Direction.UP)
+      if (handItem instanceof BlockCrank && hit.getFace() == Direction.UP && worldIn.isAirBlock(pos.up()))
         return false;
 
       TileEntity tileEntity = TileHelper.getTileEntity(worldIn, pos, TileEntity.class);
-      if (tileEntity instanceof INamedContainerProvider) {
+      if (tileEntity instanceof INamedContainerProvider)
         NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
-      }
+
       return true;
     }
     return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);

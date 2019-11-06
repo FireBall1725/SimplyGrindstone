@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import sun.rmi.log.LogHandler;
 
 public class ScreenGrindstone extends ScreenBase<ContainerGrindstone> {
   private ResourceLocation GUI = new ResourceLocation("simplygrindstone", "textures/gui/grindstone.png");
@@ -38,5 +39,8 @@ public class ScreenGrindstone extends ScreenBase<ContainerGrindstone> {
     int relX = (this.width - this.xSize) / 2;
     int relY = (this.height - this.ySize) / 2;
     this.blit(relX, relY, 0, 0, this.xSize, this.ySize);
+
+    float percent = (((float)container.getPercentProcessed() / 100) * 22);
+    this.blit(relX + 77, relY + 48, 176, 0, (int)percent, 15);
   }
 }
